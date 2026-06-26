@@ -2,6 +2,7 @@
   <h1>🏠 RoomEase TrustChain</h1>
   <p>Decentralized Tenancy Agreement Registry (FYP Implementation)</p>
   <br />
+  <a href="https://blockchain-project-rho.vercel.app/"><strong>🔗 View Live Demo</strong></a>
 </div>
 
 ---

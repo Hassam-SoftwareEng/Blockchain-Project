@@ -1,12 +1,18 @@
-# 🚀 RoomEase TrustChain – Decentralized Tenancy Agreement Registry (FYP Implementation)
+<div align="center">
+  <h1>🏠 RoomEase TrustChain</h1>
+  <p>Decentralized Tenancy Agreement Registry (FYP Implementation)</p>
+  <br />
+</div>
+
+---
 
 I am excited to share my blockchain project, **RoomEase TrustChain**, which I developed and implemented as part of my Final Year Project (FYP) with my team members. I implemented the core features and concepts of my FYP into a decentralized tenancy agreement registry built on the Ethereum blockchain.
 
-## 🏠 Project Overview
+## 📖 Project Overview
 
 **RoomEase TrustChain** focuses on the secure and transparent management of rental agreements using blockchain technology. The system enables landlords to create and manage tenancy agreements on-chain while allowing users to verify records in a trusted and decentralized environment.
 
-## 🔹 Key Features Implemented
+## ✨ Key Features Implemented
 
 - ✅ **Smart Contract Development** using Solidity
 - ✅ **Role-Based Access Control** (Owner, Landlord, Viewer)
@@ -16,15 +22,17 @@ I am excited to share my blockchain project, **RoomEase TrustChain**, which I de
 - ✅ **Real-Time Agreement Registry**
 - ✅ **Zero-Backend Architecture** using ethers.js
 
-## 🛠 Technology Stack
+## 🛠️ Technology Stack
 
-- **Solidity**
-- **Ethereum**
-- **MetaMask**
-- **ethers.js**
-- **HTML, CSS & JavaScript**
-- **Remix IDE**
-- **Ganache**
+| Technology | Description |
+|---|---|
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/solidity/solidity-original.svg" alt="Solidity" width="24" height="24"/> **Solidity** | Smart Contract programming language. |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" alt="Ethereum" width="24" height="24"/> **Ethereum** | Decentralized blockchain network. |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" width="24" height="24"/> **MetaMask** | Crypto wallet & gateway to blockchain apps. |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="ethers.js" width="24" height="24"/> **ethers.js** | Library for interacting with the Ethereum Blockchain. |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML/CSS/JS" width="24" height="24"/> **HTML, CSS & JS** | Frontend technologies. |
+| 🔷 **Remix IDE** | Ethereum IDE for smart contract development. |
+| 🍫 **Ganache** | Personal blockchain for Ethereum development. |
 
 ## 👥 Team & Acknowledgments
 
@@ -34,7 +42,10 @@ I would like to appreciate my team members for their dedication, collaboration, 
 
 Special thanks to our instructor for their guidance and support!
 
-_#Blockchain #Ethereum #Solidity #Web3 #DApp #SmartContracts #MetaMask #SoftwareEngineering #FYP #BlockchainTechnology #Innovation_
+<div align="center">
+  <br />
+  <em>#Blockchain #Ethereum #Solidity #Web3 #DApp #SmartContracts #MetaMask #SoftwareEngineering #FYP #BlockchainTechnology #Innovation</em>
+</div>
 
 ---
 

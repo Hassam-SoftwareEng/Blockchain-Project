@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RoomEase TrustChain — Blockchain Tenancy Registry</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="lm">RT</div>
+    <div><div class="ln">RoomEase TrustChain</div><div class="ls">Blockchain Verification</div></div>
+  </div>
+  <div class="nav-links">
+    <button class="nl on" onclick="go('home',this)">Home</button>
+    <button class="nl" onclick="go('verify',this)">Verify</button>
+    <button class="nl" onclick="go('all',this)">All Agreements</button>
+    <button class="nl" onclick="go('contract',this)">Contract</button>
+    <button class="nl" onclick="go('admin',this)">Admin</button>
+  </div>
+  <div class="nsp"></div>
+  <div id="walletBtn" class="w-connect" onclick="connectWallet()">
+    <div class="wd" id="wDot"></div>
+    <span class="wa" id="wAddr">Connect Wallet</span>
+    <span class="wr viewer" id="wRole">🦊</span>
+  </div>
+</nav>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div class="pg on" id="pg-home">
+  <div class="hero">
+    <div class="hero-badge">
+      <span id="chainDot" style="width:7px;height:7px;background:var(--red);border-radius:50%;display:inline-block;flex-shrink:0"></span>
+      <span id="chainLbl">Not Connected to Blockchain</span>
+    </div>
+    <h1>Tenancy Agreements,<br><span class="hero-grad">On Blockchain.</span></h1>
+    <p>RoomEase TrustChain stores tenancy agreements on Ethereum — tamper-proof, transparent, and instantly verifiable by anyone, anywhere.</p>
+    <div class="hero-btns">
+      <button class="btn bwallet" onclick="connectWallet()">🦊 Connect MetaMask</button>
+      <button class="btn bghost" onclick="go('verify',document.querySelectorAll('.nl')[1])">🔍 Verify Agreement</button>
+    </div>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">🏠</div>
+        <div class="feat-title">Register Landlords</div>
+        <div class="feat-desc">Verified landlord wallet addresses stored permanently on-chain</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📋</div>
+        <div class="feat-title">Issue Agreements</div>
+        <div class="feat-desc">Tenancy records immutably written to Ethereum smart contract</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">Instant Verify</div>
+        <div class="feat-desc">Anyone verifies any agreement in one click — no backend needed</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:920px;margin:48px auto 0">
+    <div class="card">
+      <div class="ch">📦 Deployment Guide — TrustChain.sol</div>
+      <div class="deploy-step">
+        <div class="ds-num">1</div>
+        <div class="ds-body"><strong>Open Remix IDE</strong>Go to <a href="https://remix.ethereum.org" target="_blank">remix.ethereum.org</a> → New File → name it <code>TrustChain.sol</code> → paste the contract code from the <em>Contract</em> tab above</div>
+      </div>
+      <div class="deploy-step">
+        <div class="ds-num">2</div>
+        <div class="ds-body"><strong>Compile</strong>Solidity Compiler → version <code>0.8.20</code> → click <strong>Compile TrustChain.sol</strong> → no errors should appear</div>
+      </div>
+      <div class="deploy-step">
+        <div class="ds-num">3</div>
+        <div class="ds-body"><strong>Start Ganache</strong>Run Ganache on <code>localhost:7545</code> — Chain ID must be <code>1337</code>. Import a Ganache account into MetaMask (use the private key from Ganache UI).</div>
+      </div>
+      <div class="deploy-step">
+        <div class="ds-num">4</div>
+        <div class="ds-body"><strong>Deploy</strong>Deploy & Run tab → Environment: <code>Injected Provider - MetaMask</code> → click <strong>Deploy</strong> → copy the deployed contract address shown in the Remix terminal</div>
+      </div>
+      <div class="deploy-step">
+        <div class="ds-num">5</div>
+        <div class="ds-body"><strong>Connect Frontend</strong>Click <em>Connect Wallet</em> above → go to Admin tab → paste the contract address → start registering landlords and issuing agreements!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ VERIFY ═══════════ -->
+<div class="pg" id="pg-verify">
+  <div class="ph">
+    <h1>Verify Agreement</h1>
+    <p>Query the smart contract on-chain — no backend, no middleman, no trust required</p>
+  </div>
+
+  <div class="card">
+    <div class="ch">🔍 Verify by Agreement ID</div>
+    <div class="fg">
+      <label>Agreement ID</label>
+      <input class="inp" id="vId" placeholder="e.g., AGR-001" onkeydown="if(event.key==='Enter')doVerify()">
+      <div class="hint">Enter the unique ID assigned when the agreement was issued on-chain</div>
+    </div>
+    <div class="fa">
+      <button class="btn bg" onclick="doVerify()">🔍 Verify on Blockchain</button>
+      <span style="font-size:11.5px;color:var(--gray)">Direct ethers.js call — no server involved</span>
+    </div>
+    <div id="vRes"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch">⚙️ How Verification Works</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div><div class="step-title">Enter Agreement ID</div><div class="step-desc">The unique ID assigned when the agreement was first issued on-chain (e.g. AGR-001)</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div><div class="step-title">ethers.js Calls Smart Contract</div><div class="step-desc">Direct RPC call to <code>verifyAgreement()</code> on the Ethereum node — no server or API involved</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div><div class="step-title">Result Returned From Blockchain</div><div class="step-desc">Tenant name, CNIC, property, rent, lease dates, issuer wallet, and Valid/Revoked status — all on-chain</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ALL AGREEMENTS ═══════════ -->
+<div class="pg" id="pg-all">
+  <div class="ph">
+    <h1>All Agreements</h1>
+    <p>Every tenancy agreement stored on the blockchain — public and transparent</p>
+  </div>
+  <div class="card">
+    <div class="crow">
+      <div class="ch">📋 Agreements Registry</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="bdg bb2" id="agCnt">—</span>
+        <button class="btn bsm bghost" onclick="loadAllAgreements()" style="padding:5px 12px;font-size:11.5px">↻ Refresh</button>
+      </div>
+    </div>
+    <div class="sbar">
+      <span style="color:var(--gray);font-size:14px">🔍</span>
+      <input placeholder="Search by name, ID, CNIC, or property…" oninput="filterAg(this.value)" id="agSearch">
+    </div>
+    <div class="fpills">
+      <button class="fp on" onclick="fStatus('all',this)">All</button>
+      <button class="fp" onclick="fStatus('valid',this)">✓ Valid</button>
+      <button class="fp" onclick="fStatus('revoked',this)">✗ Revoked</button>
+    </div>
+    <div id="agList">
+      <div class="empty"><div class="empty-icon">🔗</div><p>Connect wallet to load agreements from blockchain</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CONTRACT ═══════════ -->
+<div class="pg" id="pg-contract">
+  <div class="ph">
+    <h1>Smart Contract</h1>
+    <p>TrustChain.sol — the Solidity contract powering this system</p>
+  </div>
+
+  <div class="card">
+    <div class="crow">
+      <div class="ch">📄 TrustChain.sol</div>
+      <div style="display:flex;gap:8px">
+        <button class="copy-btn" onclick="copyContract()">📋 Copy Code</button>
+        <a href="https://remix.ethereum.org" target="_blank"><button class="btn bb bsm" style="margin:0">Open Remix →</button></a>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px">
+      <div style="background:var(--sur);border:1px solid var(--bdr2);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">⚡</div>
+        <div style="font-size:12px;font-weight:600">Solidity 0.8.20</div>
+        <div style="font-size:10.5px;color:var(--gray)">Compiler version</div>
+      </div>
+      <div style="background:var(--sur);border:1px solid var(--bdr2);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">🔒</div>
+        <div style="font-size:12px;font-weight:600">MIT License</div>
+        <div style="font-size:10.5px;color:var(--gray)">Open source</div>
+      </div>
+      <div style="background:var(--sur);border:1px solid var(--bdr2);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">⛓</div>
+        <div style="font-size:12px;font-weight:600">Chain ID 1337</div>
+        <div style="font-size:10.5px;color:var(--gray)">Ganache local</div>
+      </div>
+    </div>
+    <textarea id="contractSource" class="inp" readonly style="font-family:var(--mono);font-size:10.5px;height:420px;resize:vertical;line-height:1.7;color:var(--gray2);overflow-y:auto"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="ch">🔧 Public Functions</div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:8px 10px;background:var(--sur);border-radius:6px 6px 0 0;border:1px solid var(--bdr2);border-bottom:none">
+        <span style="font-size:10.5px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em">Function</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em">Type</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em">Description</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">registerLandlord(address,string,string,string)</span>
+        <span style="font-size:11px;color:var(--blue);font-weight:600">write (owner)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Register a new landlord wallet address on-chain</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">removeLandlord(address)</span>
+        <span style="font-size:11px;color:var(--blue);font-weight:600">write (owner)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Remove a registered landlord</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">issueAgreement(string,string,string,string,uint256,uint256,uint256)</span>
+        <span style="font-size:11px;color:var(--amber);font-weight:600">write (auth)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Issue a new tenancy agreement — callable by owner or landlord</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">revokeAgreement(string)</span>
+        <span style="font-size:11px;color:var(--amber);font-weight:600">write (auth)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Mark agreement as revoked (record kept on-chain)</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">deleteAgreement(string)</span>
+        <span style="font-size:11px;color:var(--blue);font-weight:600">write (owner)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Permanently delete agreement from contract storage</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">verifyAgreement(string)</span>
+        <span style="font-size:11px;color:var(--green2);font-weight:600">view (public)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Fetch all fields of any agreement — no auth required</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">getAllAgreementIds()</span>
+        <span style="font-size:11px;color:var(--green2);font-weight:600">view (public)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Returns array of all agreement IDs</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">getAllLandlords()</span>
+        <span style="font-size:11px;color:var(--green2);font-weight:600">view (public)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Returns array of all landlord addresses</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">getLandlordInfo(address)</span>
+        <span style="font-size:11px;color:var(--green2);font-weight:600">view (public)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Returns name, company, location for a landlord address</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">isRegisteredLandlord(address)</span>
+        <span style="font-size:11px;color:var(--green2);font-weight:600">view (public)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Returns true if address is a registered landlord</span>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 3fr;gap:12px;padding:9px 10px;border:1px solid var(--bdr2);border-bottom:none;transition:background .15s" onmouseover="this.style.background='rgba(88,166,255,.03)'" onmouseout="this.style.background=''">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--blue)">transferOwnership(address)</span>
+        <span style="font-size:11px;color:var(--blue);font-weight:600">write (owner)</span>
+        <span style="font-size:11.5px;color:var(--gray)">Transfer admin rights to a new wallet address</span>
+      </div>
+      <div style="height:1px;background:var(--bdr2);border-radius:0 0 6px 6px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ADMIN ═══════════ -->
+<div class="pg" id="pg-admin">
+  <div class="ph">
+    <h1>Admin Dashboard</h1>
+    <p>Manage landlords and issue tenancy agreements on the Ethereum blockchain</p>
+  </div>
+
+  <!-- Contract Setup Banner -->
+  <div class="cfg-banner" id="cfgBanner">
+    ⚙️ <strong>Contract Setup:</strong> Deploy <code>TrustChain.sol</code> using Remix IDE (see Home tab for guide), then paste the contract address below.
+    <br><br>
+    <label style="font-size:11px;color:var(--blue);display:block;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Deployed Contract Address</label>
+    <div style="display:flex;gap:8px">
+      <input class="inp" id="cfgAddr" placeholder="0x… (paste contract address from Remix)" style="font-family:var(--mono);font-size:12px" onkeydown="if(event.key==='Enter')setContractAddress()">
+      <button class="btn bb" style="flex-shrink:0" onclick="setContractAddress()">Set Address</button>
+    </div>
+  </div>
+
+  <!-- Wrong Network Banner -->
+  <div id="netBanner" class="netbanner">
+    ⚠️ Wrong network detected — please switch to <strong>Ganache (localhost:7545, Chain ID: 1337)</strong> in MetaMask.
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="sv" id="s1">—</div>
+      <div class="sl">Registered Landlords</div>
+      <div class="si">🏠</div>
+    </div>
+    <div class="stat">
+      <div class="sv" id="s2">—</div>
+      <div class="sl">Total Agreements</div>
+      <div class="si">📋</div>
+    </div>
+    <div class="stat">
+      <div class="sv" id="s3">—</div>
+      <div class="sl">Valid Agreements</div>
+      <div class="si">✓</div>
+    </div>
+    <div class="stat">
+      <div class="sv" id="s4">—</div>
+      <div class="sl">Revoked Agreements</div>
+      <div class="si">✗</div>
+      <div class="stat-trend" id="s4trend"></div>
+    </div>
+  </div>
+
+  <!-- Register Landlord -->
+  <div class="card" style="border-color:rgba(56,139,253,.2);background:rgba(56,139,253,.03)">
+    <div class="crow">
+      <div class="ch">🏠 Register New Landlord</div>
+      <span class="bdg bb2">Admin Only</span>
+    </div>
+    <div class="gr">
+      <div class="fg">
+        <label>Landlord Wallet Address *</label>
+        <input class="inp" id="llA" placeholder="0x…">
+        <div class="hint">Ethereum address from MetaMask or Ganache</div>
+      </div>
+      <div class="fg">
+        <label>Full Name *</label>
+        <input class="inp" id="llN" placeholder="e.g., Muhammad Tariq">
+      </div>
+      <div class="fg">
+        <label>Company / Agency</label>
+        <input class="inp" id="llC" placeholder="e.g., Tariq Properties">
+      </div>
+      <div class="fg">
+        <label>Location</label>
+        <input class="inp" id="llL" placeholder="e.g., Islamabad, Pakistan">
+      </div>
+    </div>
+    <div class="fa">
+      <button class="btn bg" id="regLLBtn" onclick="doRegLL()">Register Landlord on Blockchain</button>
+    </div>
+  </div>
+
+  <!-- Registered Landlords List -->
+  <div class="card">
+    <div class="crow">
+      <div class="ch">✅ Registered Landlords</div>
+      <button class="btn bsm bghost" onclick="loadLandlords()" style="padding:5px 12px;font-size:11.5px">↻ Refresh</button>
+    </div>
+    <div id="llList">
+      <div class="empty"><div class="empty-icon">🏠</div><p>Connect wallet and set contract address to load</p></div>
+    </div>
+  </div>
+
+  <!-- Issue Agreement -->
+  <div class="card">
+    <div class="ch">📋 Issue New Tenancy Agreement</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="fg">
+        <label>Agreement ID *</label>
+        <input class="inp" id="agId" placeholder="e.g., AGR-006">
+        <div class="hint">Must be unique on-chain (e.g. AGR-001, AGR-002…)</div>
+      </div>
+      <div class="fg">
+        <label>Tenant Full Name *</label>
+        <input class="inp" id="agT" placeholder="e.g., Jalal Shah">
+      </div>
+      <div class="fg">
+        <label>Tenant CNIC *</label>
+        <input class="inp" id="agC" placeholder="42201-1234567-1">
+      </div>
+      <div class="fg">
+        <label>Property ID *</label>
+        <input class="inp" id="agP" placeholder="e.g., PROP-F10-001">
+      </div>
+      <div class="fg">
+        <label>Monthly Rent (PKR) *</label>
+        <input class="inp" id="agR" placeholder="e.g., 25000" type="number" min="1">
+      </div>
+      <div></div>
+      <div class="fg">
+        <label>Lease Start *</label>
+        <input class="inp" type="date" id="agS">
+      </div>
+      <div class="fg">
+        <label>Lease End *</label>
+        <input class="inp" type="date" id="agE">
+      </div>
+    </div>
+    <div class="fa">
+      <button class="btn bg" id="issBtn" onclick="doIssue()">Issue Agreement on Blockchain</button>
+    </div>
+  </div>
+
+  <!-- TX Log -->
+  <div class="card">
+    <div class="crow">
+      <div class="ch">⛓ Blockchain Transactions (This Session)</div>
+      <span class="bdg bamb" id="txCount">0 TXs</span>
+    </div>
+    <div class="txlog" id="txLog">
+      <div class="empty"><div class="empty-icon">⛓</div><p>No transactions yet this session</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="hide"></div>
+<script src="js/app.js"></script>
+</body>
+</html>

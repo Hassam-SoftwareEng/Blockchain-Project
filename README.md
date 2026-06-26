@@ -1,10 +1,46 @@
-# RoomEase TrustChain
+# 🚀 RoomEase TrustChain – Decentralized Tenancy Agreement Registry (FYP Implementation)
 
-Blockchain-based tenancy agreement registry on Ethereum. Issues, revokes, and verifies tenancy records on-chain via a Solidity smart contract, with a zero-backend web frontend.
+I am excited to share my blockchain project, **RoomEase TrustChain**, which I developed and implemented as part of my Final Year Project (FYP) with my team members. I implemented the core features and concepts of my FYP into a decentralized tenancy agreement registry built on the Ethereum blockchain.
 
-## Project Structure
+## 🏠 Project Overview
 
-```
+**RoomEase TrustChain** focuses on the secure and transparent management of rental agreements using blockchain technology. The system enables landlords to create and manage tenancy agreements on-chain while allowing users to verify records in a trusted and decentralized environment.
+
+## 🔹 Key Features Implemented
+
+- ✅ **Smart Contract Development** using Solidity
+- ✅ **Role-Based Access Control** (Owner, Landlord, Viewer)
+- ✅ **Agreement Creation, Verification & Revocation**
+- ✅ **MetaMask Integration**
+- ✅ **Ethereum Blockchain Deployment** (Ganache / Sepolia)
+- ✅ **Real-Time Agreement Registry**
+- ✅ **Zero-Backend Architecture** using ethers.js
+
+## 🛠 Technology Stack
+
+- **Solidity**
+- **Ethereum**
+- **MetaMask**
+- **ethers.js**
+- **HTML, CSS & JavaScript**
+- **Remix IDE**
+- **Ganache**
+
+## 👥 Team & Acknowledgments
+
+Through this project, my team members **Muhamad Usama Khan** and **Tauseef Abbas** and I gained practical experience in smart contract development, blockchain architecture, Web3 integration, and decentralized application (DApp) development by transforming our FYP concepts into a practical blockchain solution. 
+
+I would like to appreciate my team members for their dedication, collaboration, and efforts throughout this journey. 🤝
+
+Special thanks to our instructor for their guidance and support!
+
+_#Blockchain #Ethereum #Solidity #Web3 #DApp #SmartContracts #MetaMask #SoftwareEngineering #FYP #BlockchainTechnology #Innovation_
+
+---
+
+## 📂 Project Structure
+
+```text
 RoomEaseTrustChain/
 │
 ├── contracts/
@@ -23,30 +59,9 @@ RoomEaseTrustChain/
 └── README.md
 ```
 
-## Why this structure
+## 🚀 Running Locally
 
-The original deliverable was a single self-contained `.html` file with inline
-`<style>` and `<script>` blocks plus a separate `.sol` contract. That works
-for quick demos, but doesn't reflect how a real dApp project is organized.
-This structure separates concerns the standard way:
-
-- **`contracts/`** — on-chain code only. This is where Remix/Hardhat/Truffle
-  expect contract sources to live.
-- **`frontend/`** — off-chain client code, itself split into markup (`index.html`),
-  styling (`css/style.css`), and behavior (`js/app.js`) — the standard
-  HTML/CSS/JS separation.
-- **`docs/`** — reserved for any architecture diagrams, ABI dumps, or report
-  material, kept out of the runnable code folders.
-
-No functionality was changed. `index.html` now links to `css/style.css` and
-`js/app.js` instead of embedding them inline; every function, event handler,
-and the embedded contract-source string (used by the in-app "Contract" tab)
-are byte-for-byte the same as the original file.
-
-## Running locally
-
-The frontend has no build step. Open `frontend/index.html` directly in a
-browser, or serve the `frontend/` folder with any static file server:
+The frontend has no build step. Open `frontend/index.html` directly in a browser, or serve the `frontend/` folder with any static file server:
 
 ```bash
 cd frontend
@@ -54,10 +69,9 @@ python3 -m http.server 8080
 # then visit http://localhost:8080
 ```
 
-MetaMask must be installed and pointed at your target network (Ganache,
-Chain ID 1337, or Sepolia).
+MetaMask must be installed and pointed at your target network (Ganache, Chain ID 1337, or Sepolia).
 
-## Deploying the contract
+## 🔗 Deploying the Contract
 
 1. Open [Remix IDE](https://remix.ethereum.org)
 2. Create `TrustChain.sol` and paste the contents of `contracts/TrustChain.sol`
@@ -65,9 +79,9 @@ Chain ID 1337, or Sepolia).
 4. Deploy via **Injected Provider — MetaMask** (Ganache or Sepolia)
 5. Copy the deployed contract address into the **Contract** tab of the running frontend
 
-See the full deployment guide in the project report for detailed steps.
+---
 
-## Proof of Work
+## 📸 Proof of Work
 
 Here are the screenshots showcasing the system in action:
 

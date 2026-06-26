@@ -66,3 +66,34 @@ Chain ID 1337, or Sepolia).
 5. Copy the deployed contract address into the **Contract** tab of the running frontend
 
 See the full deployment guide in the project report for detailed steps.
+
+## Proof of Work
+
+Here are the screenshots showcasing the system in action:
+
+### Architecture
+![Architecture](Proof%20Of%20Work/archtechture.png)
+
+### Home Page
+![Home Page](Proof%20Of%20Work/home3.png)
+
+### Dashboard
+![Dashboard](Proof%20Of%20Work/Dashboard4.png)
+
+### Contract Page
+![Contract Page](Proof%20Of%20Work/Contract%20page6.png)
+
+### Agreement Details
+![Agreement](Proof%20Of%20Work/agreement.png)
+
+### All Agreements
+![All Agreements](Proof%20Of%20Work/All%20agreements.png)
+
+### Verification
+![Verification](Proof%20Of%20Work/Verify.png)
+
+### Remix IDE (Smart Contract Deployment)
+![Remix](Proof%20Of%20Work/Remix.png)
+
+### Ganache (Local Blockchain)
+![Ganache](Proof%20Of%20Work/Ganache2.png)
